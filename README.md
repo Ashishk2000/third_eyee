@@ -2,4 +2,4 @@
 Diabetic retinopathy prediction in patients
 
 
-# this poc is ongoing will keep this file updating as i explore
+# this poc is ongoing will keep this file updating as i explore :D
