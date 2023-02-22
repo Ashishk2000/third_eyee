@@ -1,0 +1,32 @@
+{% extends 'basic.html' %}
+
+{% block body %}
+<table>
+    <thead>
+      <tr>
+        <th>Column 1</th>
+        <th>Column 2</th>
+        <th>Column 3</th>
+        <!-- add more headers as necessary -->
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data %}
+      <tr>
+        <td>{{ row.column1 }}</td>
+        <td>{{ row.column2 }}</td>
+        <td>{{ row.column3 }}</td>
+        <!-- add more cells as necessary -->
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  This code loops through the data list and displays the values of each row in an HTML table. The {{ row.column1 }} syntax accesses the value of the column1 key in the current row, and so on for the other columns.
+  
+  Note that you should customize the view and template to handle errors and display status messages to the user.
+  
+  
+  
+  
+  
+{% endblock body%}

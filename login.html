@@ -1,0 +1,42 @@
+{% extends 'basic.html' %}
+
+{% block body %}
+{% block bgstyle %}
+{% endblock bgstyle  %}
+<div class="container my-5" style="border-radius:50px;">
+
+    <form action="/login/" method="post" class="w-50 m-auto" >
+        <div>
+            {% for message in messages %}
+            <div class="alert alert-{{message.tags}} alert-dismissible fade show w-100" role="alert">
+                <strong>Message:</strong> {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% csrf_token %}
+        <div>
+            <h2>Login Here</h2>
+
+        </div>
+        <div class="form-group">
+            <label for="Username">Enter Username</label>
+            <input type="text"
+            class="form-control" name="Username" id="Username" aria-describedby="username" placeholder="Enter Username">
+        </div>
+        <div class="form-group">
+            <label for="Password">Enter Password</label>
+            <input type="password" class="form-control" name="Password" id="Password" placeholder="Enter your Password">
+        </div>
+        <div>
+            <input type="submit" value="Login" class="btn btn-warning my-2 ">
+        </div>
+        {% comment %} <div class="border border-warning">
+            {% for line in notice %}
+            <span class="">{{line}}</span><br>
+      {% endfor %}
+        </div> {% endcomment %}
+    </form>
+</div>
+
+{% endblock body %}

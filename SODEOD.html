@@ -1,0 +1,138 @@
+{% extends 'basic.html' %}
+
+{% block body %}
+  <div class="container-fluid bg-light">
+
+    <div class="list-group my-1 shadow shadow-lg">
+        <!-- {% for i in siteData %}
+                  
+        <a href="/branch/{{i.BranchId}}" class="list-group-item list-group-item-action list-group-item-secondary">{{i.BranchName}} - {{i.BranchCode}} - {{i.ip}}
+           <span class="badge text-bg-{% if i.lastFiveSecCpu > 80 %}danger{% else %}success{% endif %}">Last 5sec {{i.lastFiveSecCpu}}%</span>
+           <span class="badge text-bg-{% if i.lastOneMinCpu > 80 %}danger{% else %}success{% endif %}">Last 1 min {{i.lastOneMinCpu}}%</span>
+           <span class="badge text-bg-{% if i.lastFiveMinCpu > 80 %}danger{% else %}success{% endif %}">Last 5 min {{i.lastFiveMinCpu}}%</span>
+          </a>
+
+        {% endfor %} -->
+
+
+        <h2 class="text-center p-2">CPU Utilization</h2>
+        <hr>
+        <div >
+          <a href="/" class="link btn btn-outline-success btn-sm mx-2"> Export As CSV
+            <img src="/static/csv.png" alt="csvimage" width="20px" height="20px">
+          </a>
+          <a href="/connect" id="sodeod" class="link btn btn-outline-primary btn-sm mx-2" disabled >Check current status
+            {% comment %} <img src="/static/csv.png" alt="csvimage" width="20px" height="20px"> {% endcomment %}
+          </a>
+        </div>
+      <div class="table-responsive">
+        <table class="table table-striped table-sm table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Branch</th>
+              <th scope="col">IP</th>
+              <th scope="col">Last 5 Sec</th>
+              <th scope="col">Last 1 min</th>
+              <th scope="col">Last 5 min</th>
+              <th scope="col">Avg Temp.</th>
+              <th scope="col">Fan Status</th>
+              <th scope="col">P.S. 1</th>
+              <th scope="col">P.S. 2</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in siteData %}
+            <tr class="">
+              <td><a href="/branch/{{i.BranchId}}">{{i.BranchName}}</a></td>
+              <td>{{i.ip}}</td>
+              <td><span class="p-2 {{ i.ip }} {% if i.lastFiveSecCpu > 80 %} bg-danger text-light {% elif i.lastFiveSecCpu > 50 %} bg-warning {% else %} bg-success {% endif %}" style="border-radius:10px;">{{i.lastFiveSecCpu}}%</span></td>
+              <td><span class="p-2 {% if i.lastOneMinCpu > 80 %} bg-danger text-light {% elif i.lastOneMinCpu > 50 %} bg-warning  {% else %} bg-success {% endif %}" style="border-radius:10px;">{{i.lastOneMinCpu}}%</span></td>
+              <td><span class="p-2 {% if i.lastFiveMinCpu > 80 %} bg-danger text-light {% elif i.lastFiveMinCpu > 50 %} bg-warning  {% else %} bg-success {% endif %}" style="border-radius:10px;">{{i.lastFiveMinCpu}}%</span></td>
+              <td><span class="p-2 {% if i.temp > 40 %} bg-danger text-light {% elif i.temp > 30 %} bg-warning  {% else %} bg-success {% endif %}" style="border-radius:10px;">{{i.temp}}°C</span></td>
+              <td><span class="p-2 {% if i.fan == 'ok' %} bg-success {% else %} bg-danger text-light {% endif %}" style="border-radius:10px;">{{i.fan}}</span></td>
+              <td><span class="p-2 {% if i.primaryPower == 'ok' %} bg-success {% else %} bg-danger text-light {% endif %}" style="border-radius:10px;">{{i.primaryPower}}</span></td>
+              <td><span class="p-2 {% if i.secondaryPower == 'ok' %} bg-success {% else %} bg-danger text-light {% endif %}" style="border-radius:10px;">{{i.secondaryPower}}</span></td>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+        <!-- <a href="#" class="list-group-item list-group-item-action list-group-item-success">A simple success list group item</a>
+        <a href="#" class="list-group-item list-group-item-action list-group-item-danger">A simple danger list group item</a>
+        <a href="#" class="list-group-item list-group-item-action list-group-item-warning">A simple warning list group item</a>
+        <a href="#" class="list-group-item list-group-item-action list-group-item-info">A simple info list group item</a>
+        <a href="#" class="list-group-item list-group-item-action list-group-item-light">A simple light list group item</a>
+        <a href="#" class="list-group-item list-group-item-action list-group-item-dark">A simple dark list group item</a> -->
+      
+      </div>
+    {% comment %} <div>
+      {% for line in content %}
+        {% if "ok" in line %}
+        <span class="bg-success text-light">
+          {{line}}
+        </span>
+        <br>
+        {% else %}
+        <span class="text-dark">
+          {{line}}
+        </span>
+        <br>
+        {% endif %}
+        
+      {% endfor %}
+    </div> {% endcomment %}
+  </div>
+
+  <script>
+    ajaxrequest(521,"192.168.1.191")
+    // ajaxrequest(589,"192.168.1.192")
+    // ajaxrequest(540,"192.168.1.193")
+    // ajaxrequest(540)
+    // ajaxrequest(560)
+
+    function ajaxrequest(id,ip){
+      url = "/branch/livedata/"+id
+      col = document.getElementsByClassName(ip);
+      setInterval(()=>{
+      $.ajax(
+        {
+          url:url,
+          type:"GET",
+          success:function(response){
+            //alert(response)
+            Array.from(col).forEach((element) => {
+              if (response > 25){
+                element.classList.add("bg-danger")
+                element.classList.remove("bg-success")
+              }else{
+                element.classList.add("bg-success")
+                element.classList.remove("bg-danger")
+              }
+              element.innerHTML = response+"%"
+              console.log(response)
+            });
+          }
+        }
+      )
+    },5000)}
+
+
+    function doNothing(){
+      alert("Processing....")
+    }
+  //   {% comment %} <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+  // Loading... {% endcomment %}
+  currentSatusbtn = document.getElementById("sodeod");
+  currentSatusbtn.addEventListener('click',()=>{
+    currentSatusbtn.innerHTML = `<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Loading...`;
+    currentSatusbtn.setAttribute("onclick","doNothing()");
+    setTimeout(()=>{
+      currentSatusbtn.removeAttribute("href");
+
+    },1000)
+  });
+  
+  </script>
+{% endblock body %} 

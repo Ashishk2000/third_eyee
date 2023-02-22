@@ -1,0 +1,32 @@
+{% extends 'basic.html' %}
+
+{% block body %}
+
+<div class="table-responsive">
+
+    <table class="table table-primary table-hover">
+        <thead>
+            <tr>
+                {% for header in headers %}
+                <th>{{ header | default:"no name" }}</th>
+                {% endfor %}
+            </tr>
+    </thead>
+    <tbody>
+        {% for row in data %}
+            <tr>
+                
+                <td><span class="p-2"> {{row.0}}</span></td>              
+                <td><span class="p-2 {% if 'Retrieved' not in row.1 %} bg-danger {% else %} bg-success {% endif %}" style="border-radius:10px;"> {{row.1}}</span></td>              
+                <td><span class="p-2 {% if row.2 > 50 %} bg-danger {% else %} bg-success {% endif %}" style="border-radius:10px;"> {{row.2}}</span></td>              
+                <td><span class="p-2 {% if row.3 > 50 %} bg-danger {% else %} bg-success {% endif %}" style="border-radius:10px;"> {{row.3}}</span></td>              
+                <td><span class="p-2 {% if row.4 > 50 %} bg-danger {% else %} bg-success {% endif %}" style="border-radius:10px;"> {{row.4}}</span></td>              
+                
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+ {% endblock body %}
